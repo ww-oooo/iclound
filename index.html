@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html ng-app="icloud">
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+<script src="https://cdn.bootcss.com/angular.js/1.5.8/angular.js"></script>
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.js"></script>
+<script src="js/index.js"></script>
+<link rel="stylesheet" href="css/index.css" />
+<body ng-controller="icloudCtrl">
+<!--左侧-->
+	<div id="main" class="sc-view sc">
+		<div id="m-left" class="sc-view sc">
+			<!--提醒事项-->
+			<div id="m-warning" class="sc-view sc">
+				<div id="ml-l" class="sc-view sc">
+					<div id="ml-l-main" class="sc-view ">
+						<div></div>
+						<div>提醒事项</div>
+						<div></div>
+					</div>					
+				</div>
+				<div id="ml-r" class="sc-view sc sc-button-view">
+					<div class="tj" ng-click="addList();save2local()"></div>
+				</div>
+			</div>
+			<!--已计划列表-->
+			<div id="tj" class="sc-view">
+				<div id="tj-main" class="sc-view">
+					<!--已计划-->
+					<div id="planned" class="sc-view">
+						<div id="plan-m">
+							<div id="icon"></div>
+							<div id="plan">已计划</div>
+						</div>
+						<div id="plan-bo"></div>
+					</div>
+					<!--添加列表-->
+					<!--<div id="tj-list" class="sc-view sc" >-->
+						<div ng-x>
+							 <div  class="sc-view sc list"ng-repeat="v in lists track by $index" ng-class="{active:cu==$index}">
+								<div class="lists">
+									<div  class="{{v.theme}} co-icon"></div>
+									<div class="tx"></div>
+									<div class="wifi"></div>
+									<input type="text" class="tx" ng-model="v.name"ng-keyup="save2local()"/>
+								</div>
+								<div class="border-tr"></div>
+								<div class="border-fr"></div>
+								<div class="row-divider-bottom"></div>
+							</div>	
+							
+						</div>
+												
+					<!--</div>-->
+				</div>
+			</div>
+		</div>
+<!--右侧-->
+		<div id="m-right" class="sc-view sc">
+			<div id="seek" class="sc-view sc">
+				<div id="se-l" class="sc-view sc">
+					<div id="ss" >
+						<div id="ssz">搜索所有提醒</div>
+						<input type="text" />
+					</div>
+					<div id="ss-icon" class="sc-view sc">
+						<div id="icon" class="sc-view sc"></div>
+					</div>
+				</div>
+				<div id="se-r" class="sc-view sc">
+					<div id="se-name" class="sc-view ">
+						<div id="n-name">王伟</div>
+						<div id="jt"></div>
+					</div>
+					<div id="yiwen" class="sc-view ">
+						<div id="help"></div>
+					</div>
+				</div>
+			</div>
+<!--下-->
+		<div id="list-x" class="sc-view sc">
+			<div id="list-mx" class="sc-view sc">
+				<!--选项-->
+				<div id="list-tx" class="sc-view sc">
+					<div id="list-lx" class="sc-view {{lists[cu].theme}}">{{lists[cu].name}}</div>
+					<div c-lo>
+						<div class="change {{lists[cu].theme}}">选项</div>
+					</div>
+					<!--<div id="list-rx" lass="sc-view sc">
+						
+					</div>-->
+				</div>
+				<!--新项目-->
+				<div id="new-pro" class="sc-view">
+					<div class="row-divider-top np"></div>
+					<div id="new-pro-main" class="sc-view">
+						<div id="new-pro-mn" class="sc-view">
+							<div id="over" class="sc-view">
+								<div class="background-container"></div>
+								<div class="label-container">已完成：{{count()}} 项</div>
+								<div class="neirong" ng-init="show=true">
+									<div class=" disclosure-button-closed"></div>
+									<!--<div class=" disclosure-button-open"></div>-->
+							<!--清除已完成事项-->
+									<div class="clean">
+										<label  class="clean1 {{lists[cu].theme}}">清除已完成事项</label>
+									</div>
+							<!--点击开了出现的线-->
+									<div class="st-x sc-view">
+										<div class="row-divider-bottom"></div>
+									</div>
+								</div>
+					<!--包裹-->
+					<div id="baoguo">
+						<!--出现的内容已完成的-->
+									<div class="overdo sc-view" ng-init="a=12">
+										<div class="overdo1 sc-view" ng-repeat="v in lists[cu].todos track by $index" ng-if="v.state==1">
+											<div class="row-divider-top " ></div>
+											<div class="row-divider-top1 bg "></div>
+											<div class="row-divider-bottom  "></div>
+											<div class="row-divider-bottom1 bg "></div>
+											<div class="selected-row-background"></div>
+											<div class="selected-row-background1 bg"></div>
+											<div class="sc-outline">
+												<a class="sc-view a-cir" href="#">
+													<div class="a-appear {{lists[cu].theme}}" ng-click="v.state=0;save2local()"></div>
+												</a>
+												<input type="text" class="reminder-title" ng-model="v.name" ng-keyup="save2local()"/>
+												<div  class="button details-button">
+													<label class="{{lists[cu].theme}}">详细信息</label>
+												</div>
+											</div>
+										</div>
+									</div>
+							<!--完成结束-->
+						<!--空白-->											
+								<div class="white"></div>
+						<!--未完成-->
+								<div class="wwc">
+									<div class="overdo1 sc-view" ng-repeat="v in lists[cu].todos track by $index" ng-if="v.state==0">
+										<div class="row-divider-top " ></div>
+										<div class="row-divider-top1 bg "></div>
+										<div class="row-divider-bottom  "></div>
+										<div class="row-divider-bottom1 bg "></div>
+										<div class="selected-row-background"></div>
+										<div class="selected-row-background1 bg"></div>
+										<div class="sc-outline">
+											<a class="sc-view a-cir" href="#">
+												<div class="a-appear1 {{lists[cu].theme}}" ng-click="v.state=1;save2local()"></div>
+											</a>
+											<input type="text" class="reminder-title" ng-model="v.name" ng-keyup="save2local()"/>
+											<div  class="button details-button">
+												<label class="{{lists[cu].theme}}">详细信息</label>
+											</div>
+										</div>
+									</div>
+								</div>
+						<!--添加列-->
+								<!--<div class="add-x">
+									<div class="overdo1 sc-view">
+											<div class="row-divider-top"></div>
+											<div class="row-divider-bottom"></div>
+											<div class="sc-outline">
+												<a class="sc-view a-cir" href="#">
+													<div class="a-appear1 {{lists[cu].theme}}">
+														
+													</div>
+												</a>
+												<input type="text" class="reminder-title" ng-model="value" />
+											</div>
+										</div>
+								</div>-->
+						<!--新项目-->
+								<div class="xxm sc-view" ng-click="lists[cu].todos.push({name:value,state:0});value='';save2local()">
+									<div class="row-divider-top"></div>
+									<div class="row-divider-bottom"></div>
+									<label class="title">新项目...</label>
+								</div>
+						
+					</div>
+						
+									
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+		
+		
+	</div>
+	<!--选项弹出框-->
+	<div class="change-t sc-view">
+		<!--三角形-->
+		<div class="sj">
+			<div class="sjx"></div>
+		</div>
+		<!--颜色-->
+		<div class="colo sc-view">
+			<div class="co-m sc-view">
+				<div class="shuru sc-view">
+					<div class="border"></div>
+					<div class="padding">
+						<div aria-hidden="true" class="hint ellipsis">	
+						</div>
+						<input  class="field {{lists[cu].theme}}" type="text" ng-model="lists[cu].name"ng-keyup="save2local()">						
+					</div>
+				</div>
+				<div class="liebiao-color sc-view">列表颜色</div>
+				<div class="secai sc-view">
+					<div class="selection-circle  first-color sel {{(lists[cu].theme===v)?v:''}}"ng-repeat="v in color" ng-click="lists[cu].theme=v;a()">
+						<div class="collection-color-icon {{v}}" ng-click="lists[cu].theme=v;save2local()"></div>
+					</div>
+				</div>
+				<div class="xuanqu sc-view">
+					<div class="del sc-view">
+						<div class="del1 ">
+							<label class="sc-button-label " ng-click="remove()">删除</label>
+						</div>
+					</div>
+					<div class="again sc-view">
+							<div class="quxiao">
+								<label  class="sc-button-label">取消</label>
+							</div>
+							<div class="span-x sc-view">
+								<span></span>
+							</div>
+							<div class="wancheng sc-view">
+								<label  class="sc-button-label">完成</label>
+							</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--详细信息-->
+	<!--<div class="information sc-view">
+		<div class="sj">
+			<div class="sjx"></div>
+		</div>
+		<div class="info sc-view">
+			<div class="much-info sc-view">详细信息</div>
+			<div class="beizhu sc-view">
+				<div class="lie sc-view">列表</div>
+				<div class="youxian sc-view">优先级</div>
+				<div class="input1 sc-view">
+					<label  class="label">提</label>
+				</div>
+				<div class="input2 sc-view">
+					<label class="label">无</label>
+				</div>
+				<div class="input3 sc-view">
+					<div class="border"></div>
+					<div class="padding">
+						<div aria-hidden="true" class="hint">备注（可选）</div>
+						<textarea   class="field1" ></textarea>
+					</div>
+				</div>				
+			</div>
+			<div class="anniu sc-view">
+				<div class="sc sc-view">
+					<div class="sc1 sc-view">
+						<div class="sc2">删除</div>
+					</div>
+				</div>
+				<div class="wc sc-view">
+					<div class="wc1 sc-view">
+						<div class="wc2">完成</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>-->
+<!--清除所有完成事项界面-->
+	<div class="mask sc-view"></div>
+	<div class="clear-k sc-view">
+		<div class="clear-m ">
+			<div class="tm"></div>
+			<div class="zi1">是否清除所有已完成提醒?</div>
+			<div class="zi2">所有已完成的提醒事项将永久删除。您不能撤销此操作。</div>
+			<div class="anniu">
+				<div class="left">取消</div>
+				<div class="right" ng-click="clear();save2local()">清除已完成事项</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
